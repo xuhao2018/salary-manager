@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manager.salarymanager.mapper.EmployeeMapper" >
+
+    <sql id="all_emp">
+        id ,
+        did ,
+        name ,
+        sex ,
+        age ,
+        sid
+    </sql>
+
+    <sql id="except_id">
+        name ,
+        sex ,
+        did ,
+        age ,
+        sid
+    </sql>
+
+
+    <resultMap id="emp_dept_sal" type="com.manager.salarymanager.bean.Employee">
+        <id property="id" column="id"></id>
+        <result property="did" column="did"></result>
+        <result property="name" column="name"></result>
+        <result property="sex" column="sex"></result>
+        <result property="age" column="age"></result>
+        <result property="sid" column="sid"></result>
+        <association property="deptment"  column="did" select="com.manager.salarymanager.mapper.DeptmentMapper.selectOne"
+        javaType="com.manager.salarymanager.bean.Deptment" />
+        <association property="salary" column="sid" select="com.manager.salarymanager.mapper.SalaryMapper.selectOne"
+        javaType="com.manager.salarymanager.bean.Salary"/>
+    </resultMap>
+
+    <select id="selectAll" resultMap="emp_dept_sal" >
+         select  <include refid="all_emp"></include>
+         from employee
+    </select>
+
+    <select id="selectOne" resultMap="emp_dept_sal" >
+        select <include refid="all_emp"></include>
+       from  employee
+        <where>
+            id = #{id}
+        </where>
+    </select>
+
+    <delete id="deleteOne">
+        delete from employee
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+
+    <update id="updateOne" keyColumn="id" keyProperty="id">
+        update employee
+        <set>
+        <if test="_parameter.name !=null">
+        name = #{_parameter.name} ,
+        </if>
+        <if test="_parameter.sex !=null">
+        sex = #{_parameter.sex} ,
+        </if>
+        <if test="_parameter.did !=null">
+        did = #{_parameter.did} ,
+        </if>
+        <if test="_parameter.age !=null">
+        age = #{_parameter.age} ,
+        </if>
+        </set>
+        <where>
+            id = #{_parameter.id}
+        </where>
+    </update>
+
+    <insert id="insertOne" keyProperty="id" keyColumn="id" useGeneratedKeys="true">
+        insert into employee
+        (<include refid="all_emp"></include> )
+        values
+        <trim suffixOverrides="," prefix="(" suffix=")">
+            <if test="_parameter.id !=null">
+                #{_parameter.id} ,
+            </if>
+            <if test="_parameter.did !=null">
+                #{_parameter.did} ,
+            </if>
+        <if test="_parameter.name !=null">
+            #{_parameter.name} ,
+        </if>
+        <if test="_parameter.sex !=null">
+            #{_parameter.sex} ,
+        </if>
+        <if test="_parameter.age !=null">
+            #{_parameter.age} ,
+        </if>
+        <if test="_parameter.sid !=null">
+             #{_parameter.sid} ,
+        </if>
+        </trim>
+    </insert>
+
+</mapper>
+
+

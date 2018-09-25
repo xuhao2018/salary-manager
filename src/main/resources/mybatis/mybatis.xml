@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+
+    <settings>
+        <!-- 开启驼峰命名法 -->
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+
+        <!-- 打印查询语句 -->
+        <setting name="logImpl" value="STDOUT_LOGGING" />
+
+        <!--<setting name="logImpl" value="SLF4J"></setting>-->
+        <!--开启延迟加载-->
+        <setting name="lazyLoadingEnabled" value="true"></setting>
+
+
+        <!--关闭侵入式加载，使用深度加载-->
+        <setting name="aggressiveLazyLoading" value="false"></setting>
+
+
+        <!--开启二级缓存-->
+        <setting name="cacheEnabled" value="true"></setting>
+
+    </settings>
+
+
+    <!--<typeAliases>-->
+    <!--&lt;!&ndash; 起别名 &ndash;&gt;-->
+    <!--<package name="com.xuhao.bean"/>-->
+    <!---->
+    <!--</typeAliases>-->
+
+
+    <!--<plugins>-->
+        <!--<plugin interceptor="com.github.pagehelper.PageInterceptor">-->
+            <!--&lt;!&ndash; 分页合理化-->
+             <!--页码 小于 1 就查询第一页-->
+             <!--页码大于 总页数 就查最后一页-->
+             <!--&ndash;&gt;-->
+            <!--<property name="reasonable" value="true"/>-->
+        <!--</plugin>-->
+    <!--</plugins>-->
+
+
+
+</configuration>

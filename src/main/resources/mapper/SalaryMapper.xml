@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manager.salarymanager.mapper.SalaryMapper" >
+
+    <sql id="all_sal" >
+     id ,
+     base ,
+     welfare ,
+     bonus ,
+     unemploy ,
+     legal
+    </sql>
+
+    <sql id="except_id">
+      base ,
+     welfare ,
+     bonus ,
+     unemploy ,
+     legal
+    </sql>
+
+
+    <select id="selectOne" resultType="com.manager.salarymanager.bean.Salary">
+        select <include refid="all_sal"></include>
+            from  salary
+        <where>
+            id = #{id}
+        </where>
+    </select>
+    
+    <delete id="deleteOne">
+        delete from salary
+        <where>
+            id = #{id}
+        </where>
+    </delete>
+
+
+    <update id="updateOne" keyColumn="id" keyProperty="id">
+        update salary
+        <set >
+        <if test="_parameter.base !=null">
+            base = #{_parameter.base} ,
+        </if>
+        <if test="_parameter.welfare !=null">
+            welfare = #{_parameter.welfare} ,
+        </if>
+        <if test="_parameter.bonus !=null">
+            bonus = #{_parameter.bonus} ,
+        </if>
+        <if test="_parameter.unemploy !=null">
+            unemploy = #{_parameter.unemploy} ,
+        </if>
+        <if test="_parameter.legal !=null">
+            legal = #{_parameter.legal} ,
+        </if>
+        </set>
+        <where>
+            id = #{_parameter.id}
+        </where>
+    </update>
+
+    <insert id="insertOne" useGeneratedKeys="true" keyColumn="id" keyProperty="id" >
+        insert into salary
+        (<include refid="except_id"></include> )
+        values
+        (
+        <trim suffixOverrides=",">
+        <if test="_parameter.base !=null">
+            #{_parameter.base} ,
+        </if>
+        <if test="_parameter.welfare !=null">
+             #{_parameter.welfare} ,
+        </if>
+        <if test="_parameter.bonus !=null">
+            #{_parameter.bonus} ,
+        </if>
+        <if test="_parameter.unemploy !=null">
+            #{_parameter.unemploy} ,
+        </if>
+        <if test="_parameter.legal !=null">
+            #{_parameter.legal} ,
+        </if>
+        </trim>
+        )
+    </insert>
+
+
+</mapper>

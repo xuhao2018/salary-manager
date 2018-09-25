@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
+    <script th:inline="javascript">
+
+          $(function () {
+
+              $(".dept_unset").on("click",function (e) {
+                  e.stopPropagation()
+                  e.preventDefault()
+                  $(window).prop("location",$(this).attr("unset"))
+              })
+
+
+          })
+
+
+    </script>
+</head>
+<body>
+
+<body>
+<table th:border="1" th:width="100px">
+    <tr>
+        <th>id</th>
+        <th>部门名称</th>
+        <th>员工数量</th>
+        <th>修改</th>
+        <th>重置</th>
+    </tr>
+    <tr th:each="dept:${depts}" >
+        <form method="post" th:action="@{'/dept/' + ${dept.did}}" >
+            <input type="hidden" name="_method" value="put" />
+        <td><input type="text" th:value="${dept.did}" name="did" readonly /> </td>
+            <td><input type="text" th:value="${dept.dname}" name="dname" /> </td>
+            <td><input type="text" th:value="${dept.dnumber}" name="dnumber" /> </td>
+            <td><input type="submit" th:value="修改" /></td>
+            <td><button class="dept_unset" th:attr="unset=@{'/depts'}">重置</button></td>
+        </form>
+    </tr>
+</table>
+
+
+  <form method="post" th:action="@{'/dept'}">
+      <label>名称</label> <input name="dname" type="text" />
+     <input type="submit" value="添加" />
+  </form>
+
+
+</body>
+</html>

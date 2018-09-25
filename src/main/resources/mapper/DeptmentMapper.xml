@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.manager.salarymanager.mapper.DeptmentMapper" >
+
+    <sql id="all_dept" >
+     did ,
+     dname ,
+     dnumber
+    </sql>
+
+    <sql id="except_id">
+        dname ,
+       dnumber
+    </sql>
+
+    <select id="selectOne" resultType="com.manager.salarymanager.bean.Deptment">
+        select <include refid="all_dept"></include>
+        from  deptment
+        <where>
+            did = #{id}
+        </where>
+    </select>
+
+    <select id="selectAll" resultType="com.manager.salarymanager.bean.Deptment" >
+        select  <include refid="all_dept"></include>
+        from deptment
+    </select>
+
+    <update id="updateOne" keyProperty="did" keyColumn="did">
+        update deptment
+        <set>
+            <if test="_parameter.dname !=null">
+                dname = #{_parameter.dname} ,
+            </if>
+            <if test="_parameter.dnumber  !=null">
+                dnumber = #{_parameter.dnumber} ,
+            </if>
+        </set>
+        <where>
+            did = #{_parameter.did}
+        </where>
+    </update>
+
+    <insert id="insertOne" keyColumn="did" keyProperty="did" useGeneratedKeys="true">
+        insert into deptment
+        (<include refid="except_id"></include> ) values
+        <trim suffixOverrides="," prefix="(" suffix=")"  >
+            <if test="_parameter.dname !=null">
+                #{_parameter.dname} ,
+            </if>
+            <choose>
+                <when test="_parameter.dnumber !=null">
+                    #{_parameter.dnumber}  ,
+                </when>
+                <otherwise>
+                    0 ,
+                </otherwise>
+            </choose>
+        </trim>
+
+    </insert>
+
+
+</mapper>

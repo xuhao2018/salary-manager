@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script th:src="@{/webjars/jquery/3.3.1-1/jquery.min.js}"></script>
+
+            <script th:inline="javascript">
+
+                $(function(){
+
+                //     删除 事件
+                    $(".delete_emp").on("click",function(e) {
+                        e.stopPropagation()
+                        e.preventDefault()
+                      $("#delete_form").prop("action",$(this).attr("delete")).submit() ;
+                    })
+
+
+                    //重置事件
+                    $(".unset_emp").on("click",function (e) {
+                        e.stopPropagation()
+                        e.preventDefault()
+                        $(window).prop("location",$(this).attr("unset"))
+                    })
+
+                    $("#add_submit").on("click",function (e) {
+
+                        let conti = true
+
+                        $(this).parent().children("input").not("[name='sex'] , [type='submit']").each(function (index,element) {
+                          if (conti){
+                              function f(ele) {
+                                  e.stopPropagation()
+                                  e.preventDefault()
+                                  alert(ele.name + "有误")
+                                  conti= false
+                              }
+                              if (element.name === 'name') {
+                                  if (element.value ==='')
+                                      f(element)
+                                      return
+                                  }
+                              if (element.value ==='' || isNaN(element.value)) {
+                                  f(element)
+                              }
+                          }
+
+                      })
+
+                        if (conti){
+                            $(this).parent().children("input[name^='salary']").each(function (index,element) {
+                                 element.value = Math.floor(parseFloat(element.value) * 10)
+                            })
+                        }
+
+                    })
+
+
+
+
+                })
+
+            </script>
+
+</head>
+<body>
+   <table th:border="1" th:width="100px">
+ <tr>
+     <th>id</th>
+     <th>姓名</th>
+     <th>年龄</th>
+     <th>性别</th>
+     <th>部门</th>
+     <th>基本工资</th>
+     <th>福利补贴</th>
+     <th>奖励工资</th>
+     <th>失业保险</th>
+     <th>住房公积金</th>
+     <th>删除</th>
+     <th>修改</th>
+     <th>重置</th>
+ </tr>
+  <tr th:each="emp:${emps}" >
+      <form method="post" th:action="@{'/emp/' + ${emp.id}}" >
+          <input name="_method" value="put" type="hidden" />
+      <td><input name="id" th:type="text" th:value="${emp.id}" readonly /></td>
+          <td><input name="name" th:type="text" th:value="${emp.name}" /></td>
+          <td><input name="age" th:type="text" th:value="${emp.age}" /></td>
+      <td>
+          <select name="sex">
+              <option th:value="M" th:selected="${emp.sex == 'M'}">男</option>
+              <option th:value="F" th:selected="${emp.sex == 'F'}">女</option>
+          </select>
+      </td>
+      <td>
+          <select name="did">
+              <option th:each="dept:${depts}" th:value="${dept.did}"
+                      th:text="${dept.dname}" th:selected="${dept.did} == ${emp.deptment.did}"></option>
+          </select>
+      </td>
+      <td><input name="salary.base" th:type="text" th:value="${emp.salary.base }" /></td>
+      <td><input name="salary.welfare" th:type="text" th:value="${emp.salary.welfare  }" /></td>
+      <td><input name="salary.bonus" th:type="text" th:value="${emp.salary.bonus }" /></td>
+      <td><input name="salary.unemploy" th:type="text" th:value="${emp.salary.unemploy }" /></td>
+      <td><input name="salary.legal" th:type="text" th:value="${emp.salary.legal  }" /></td>
+      <td><button class="delete_emp" th:attr="delete=@{'/emp/'+${emp.id}}">删除</button></td>
+      <td><input class="update_emp" type="submit" value="更新" /></td>
+      <td><button class="unset_emp"  th:attr="unset=@{'/emps'}">重置</button></td>
+
+      </form>
+  </tr>
+   </table>
+
+   <form method="post" id="insert_form" th:action="@{'/emp'}">
+       <label>编号</label> <input name="id" type="text" /><br/>
+       <label>姓名</label> <input name="name" type="text" /><br/>
+       <label>年龄</label> <input name="age" type="text" /><br/>
+       <label>性别</label>
+       男<input type="radio" name="sex" value="M" checked />
+       女<input type="radio" name="sex" value="F"/>
+       <br/>
+       <label>部门</label>
+       <select name="did">
+           <option th:each="dept:${depts}" th:value="${dept.did}" th:text="${dept.dname}" ></option>
+       </select>
+       <br/>
+       <label>基本工资</label> <input name="salary.base" type="text" /><br/>
+       <label>福利补贴</label> <input name="salary.welfare" type="text" /><br/>
+       <label>奖励工资</label> <input name="salary.bonus" type="text" /><br/>
+       <label>失业保险</label> <input name="salary.unemploy" type="text" /><br/>
+       <label>住房公积金</label> <input name="salary.legal" type="text" /><br/>
+       <input id="add_submit" type="submit" value="添加" />
+   </form>
+
+
+
+
+<form method="post" id="delete_form">
+    <input type="hidden" name="_method" value="delete"  />
+</form>
+
+
+
+
+</body>
+</html>
